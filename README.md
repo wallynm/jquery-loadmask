@@ -10,15 +10,16 @@ jQuery version required: 1.2.3 or later.
 Please note that only elements that accept child nodes can be masked.
 
 To start using the plugin you need to include jquery.loadmask.css and jquery.loadmask.js (or its minified version jquery.loadmask.min.js) to your html page:
-
+```javascript
 <link href="jquery.loadmask.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="jquery.loadmask.min.js"></script>
+```
 Masking
 To put a mask over an element (or multiple elements) simply call mask(label, delay) method with a config option:
 ```javascript
 $("#mydiv").mask({ message: "Loading..." });
 $(".grids").mask({ message: "Loading...", delay: 500 });
-...
+```
 If message is provided, a little box with this message and a spinner will be placed on top of the mask, otherwise only a transparent  mask is displayed that is by default in gray color (#ccc).
 
 delay option sets a delay in milliseconds before element(s) is masked. If unmask() is called before the delay times out, no mask is displayed. This can be used to prevent unnecessary mask display for quick processes.
