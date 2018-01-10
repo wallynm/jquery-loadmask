@@ -12,19 +12,26 @@
 	/**
 	 * Displays loading mask over selected element(s). Accepts both single and multiple selectors.
 	 *
-	 * @param label Text message that will be displayed on top of the mask besides a spinner (optional). 
-	 * 				If not provided only mask will be displayed without a label or a spinner.  	
+	 * @param message Text message that will be displayed on top of the mask besides a spinner (optional). 
+	 * 				If not provided only mask will be displayed without a message or a spinner.  	
 	 * @param delay Delay in milliseconds before element is masked (optional). If unmask() is called 
 	 *              before the delay times out, no mask is displayed. This can be used to prevent unnecessary 
 	 *              mask display for quick processes.   	
 	 */
-	$.fn.mask = function(label, delay){
+    $.fn.mask = function (config) {
+        var _config = $.extend({
+            message: "",
+            delay: 0,
+            opacity: 0.5,
+            backgroundColor: '#CCC',
+            loadingIcon: true
+        }, config)
 		$(this).each(function() {
-			if(delay !== undefined && delay > 0) {
+		    if (_config.delay !== undefined && _config.delay > 0) {
 		        var element = $(this);
-		        element.data("_mask_timeout", setTimeout(function() { $.maskElement(element, label)}, delay));
+		        element.data("_mask_timeout", setTimeout(function () { $.maskElement(element, _config.message) }, _config.delay));
 			} else {
-				$.maskElement($(this), label);
+		        $.maskElement($(this), _config);
 			}
 		});
 	};
@@ -45,7 +52,7 @@
 		return this.hasClass("masked");
 	};
 
-	$.maskElement = function(element, label){
+	$.maskElement = function(element, config){
 	
 		//if this element has delayed mask scheduled then remove it and display the new one
 		if (element.data("_mask_timeout") !== undefined) {
@@ -63,7 +70,11 @@
 		
 		element.addClass("masked");
 		
-		var maskDiv = $('<div class="loadmask"></div>');
+		var maskDiv = $('<div class="loadmask"></div>').css({
+            "background-color": config.backgroundColor,
+		    opacity: config.opacity,
+		    filter: "alpha(opacity=" + (config.opacity * 100) + ")"
+        });
 		
 		//auto height fix for IE
 		if(navigator.userAgent.toLowerCase().indexOf("msie") > -1){
@@ -78,9 +89,13 @@
 		
 		element.append(maskDiv);
 		
-		if(label !== undefined) {
-			var maskMsgDiv = $('<div class="loadmask-msg" style="display:none;"></div>');
-			maskMsgDiv.append('<div>' + label + '</div>');
+		if(config.message) {
+		    var maskMsgDiv = $('<div class="loadmask-msg" style="display:none;"></div>');
+		    if (config.loadingIcon) {
+		        maskMsgDiv.append('<div>' + config.message + '</div>');
+		    } else {
+		        maskMsgDiv.append(config.message);
+		    }
 			element.append(maskMsgDiv);
 			
 			//calculate center position
