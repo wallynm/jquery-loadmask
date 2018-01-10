@@ -10,10 +10,10 @@ jQuery version required: 1.2.3 or later.
 Please note that only elements that accept child nodes can be masked.
 
 To start using the plugin you need to include jquery.loadmask.css and jquery.loadmask.js (or its minified version jquery.loadmask.min.js) to your html page:
-
+```html
 <link href="jquery.loadmask.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="jquery.loadmask.min.js"></script>
-
+```
 Masking
 To put a mask over an element (or multiple elements) simply call mask(label, delay) method with a config option:
 ```javascript
