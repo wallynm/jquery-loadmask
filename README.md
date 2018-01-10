@@ -1,19 +1,19 @@
-##LoadMask jQuery plugin
+## LoadMask jQuery plugin
 The behavior of this plugin is largely based on handy Element.mask() method from ExtJS Framework.
 LoadMask jQuery plugin can mask DOM elements while their content is loading or changing to prevent user interactions and inform that some background task is still running. It is very light (~2Kb) and easy to use.
 
 [You can try online demo here.](http://jquery-loadmask.googlecode.com/svn/trunk/demo/index.html)
 
-####Usage
+#### Usage
 jQuery version required: 1.2.3 or later.
 
 Please note that only elements that accept child nodes can be masked.
 
 To start using the plugin you need to include jquery.loadmask.css and jquery.loadmask.js (or its minified version jquery.loadmask.min.js) to your html page:
-```javascript
+
 <link href="jquery.loadmask.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="jquery.loadmask.min.js"></script>
-```
+
 Masking
 To put a mask over an element (or multiple elements) simply call mask(label, delay) method with a config option:
 ```javascript
@@ -34,7 +34,7 @@ The complete object for config option is as below:
    loadingIcon: true         // show loading icon or not
 }
 ```
-####Unmasking
+#### Unmasking
 To remove a previously displayed mask from an element (or multiple elements) call unmask() without any parameters:
 ```javascript
 $("#mydiv").unmask();
@@ -46,10 +46,10 @@ You can use isMasked() method on a single element to check if it is currently ma
 ```javascript
 if($("#mydiv").isMasked()) { ... }
 ```
-####Integration with Jquery UI
+#### Integration with Jquery UI
 Please take a look at this [code](https://code.google.com/p/jquery-loadmask/issues/detail?id=4&can=1)
 
-####Contributors
+#### Contributors
 wpaap - provided snapshot for integration with ASP.net UpdatePanel
 Artur Alexandre Moreira (artur.alexandre@gmail.com) - implemented delayed mask
 theonlylawislove - provided Jquery UI integration solution
