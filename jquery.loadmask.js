@@ -21,15 +21,27 @@
     $.fn.mask = function (config) {
         var _config = $.extend({
             message: "",
+            messageTop: undefined,
+            messageLeft: undefined,
+            messageClass: "",
             delay: 0,
             opacity: 0.5,
             backgroundColor: '#CCC',
-            loadingIcon: true
-        }, config)
+            loadingIcon: true,
+            iconBackground: "",
+            maskTime: 0,
+            cancellable: true,
+            showTiming: true,
+            callback: null
+        }, config);
+
 		$(this).each(function() {
 		    if (_config.delay !== undefined && _config.delay > 0) {
 		        var element = $(this);
-		        element.data("_mask_timeout", setTimeout(function () { $.maskElement(element, _config.message) }, _config.delay));
+
+		        element.data("_mask_timeout", setTimeout(function () {
+		            $.maskElement(element, _config.message);
+		        }, _config.delay));
 			} else {
 		        $.maskElement($(this), _config);
 			}
@@ -56,8 +68,16 @@
 	
 		//if this element has delayed mask scheduled then remove it and display the new one
 		if (element.data("_mask_timeout") !== undefined) {
-			clearTimeout(element.data("_mask_timeout"));
-			element.removeData("_mask_timeout");
+			window.clearTimeout(element.data("_mask_timeout"));
+			window.element.removeData("_mask_timeout");
+		}
+		if (element.data("_mask_time") !== undefined) {
+		    window.clearTimeout(element.data("_mask_time"));
+		    element.removeData("_mask_time");
+		}
+		if (element.data("_mask_timing") !== undefined) {
+		    window.clearTimeout(element.data("_mask_timing"));
+		    element.removeData("_mask_timing");
 		}
 
 		if(element.isMasked()) {
@@ -89,29 +109,86 @@
 		
 		element.append(maskDiv);
 		
-		if(config.message) {
+		if (config.message) {
 		    var maskMsgDiv = $('<div class="loadmask-msg" style="display:none;"></div>');
+		    var msgElement = $('<div>').addClass("message").addClass(config.messageClass).append(config.message);
+
 		    if (config.loadingIcon) {
-		        maskMsgDiv.append('<div>' + config.message + '</div>');
-		    } else {
-		        maskMsgDiv.append(config.message);
+		        msgElement.addClass("icon");
+
+		        if (config.iconBackground) {
+		            msgElement.css("background", config.iconBackground);
+		        }
 		    }
+
+		    maskMsgDiv.append(msgElement);
+
 			element.append(maskMsgDiv);
 			
-			//calculate center position
-			maskMsgDiv.css("top", Math.round(element.height() / 2 - (maskMsgDiv.height() - parseInt(maskMsgDiv.css("padding-top")) - parseInt(maskMsgDiv.css("padding-bottom"))) / 2)+"px");
-			maskMsgDiv.css("left", Math.round(element.width() / 2 - (maskMsgDiv.width() - parseInt(maskMsgDiv.css("padding-left")) - parseInt(maskMsgDiv.css("padding-right"))) / 2)+"px");
+			if (config.messageTop != undefined) {
+			    maskMsgDiv.css("top", config.messageTop);
+			} else {
+			    //calculate vertical center position
+			    maskMsgDiv.css("top", Math.round(element.height() / 2 - (maskMsgDiv.height() - parseInt(maskMsgDiv.css("padding-top")) - parseInt(maskMsgDiv.css("padding-bottom"))) / 2) + "px");
+			}
+			if (config.messageLeft != undefined) {
+			    maskMsgDiv.css("left", config.messageLeft);
+			} else {
+			    //calculate horizontal center position
+			    maskMsgDiv.css("left", Math.round(element.width() / 2 - (maskMsgDiv.width() - parseInt(maskMsgDiv.css("padding-left")) - parseInt(maskMsgDiv.css("padding-right"))) / 2) + "px");
+			}
 			
 			maskMsgDiv.show();
 		}
 		
+		if (config.maskTime) {
+		    element.data("_mask_time", window.setTimeout(function () {
+		        $.unmaskElement(element);
+
+		        if ($.isFunction(config.callback)) {
+		            config.callback(element, config);
+		        }
+		    }, config.maskTime));
+		    
+		    if (config.showTiming && $(element).find("div.message span.timing").length > 0) {
+		        var time = config.maskTime / 1000;
+
+		        $(element).find("div.message span.timing").text(time);
+
+		        element.data("_mask_timing", window.setInterval(function () {
+		            time--;
+
+		            $(element).find("div.message span.timing").text(time);
+
+		            if (time <= 0) {
+		                window.clearInterval(element.data("_mask_timing"));
+		            }
+		        }, 1000));
+		    }
+		}
+
+		if (config.cancellable) {
+		    $(element).find("div.loadmask").click(function () {
+		        $.unmaskElement(element);
+
+		        if ($.isFunction(config.callback)) {
+		            config.callback(element, config);
+		        }
+		    });
+		}
 	};
 	
 	$.unmaskElement = function(element){
 		//if this element has delayed mask scheduled then remove it
 		if (element.data("_mask_timeout") !== undefined) {
-			clearTimeout(element.data("_mask_timeout"));
-			element.removeData("_mask_timeout");
+		    window.clearTimeout(element.data("_mask_timeout"));
+		    element.removeData("_mask_timeout");
+
+		    window.clearTimeout(element.data("_mask_time"));
+		    element.removeData("_mask_time");
+
+		    window.clearTimeout(element.data("_mask_timing"));
+		    element.removeData("_mask_timing");
 		}
 		
 		element.find(".loadmask-msg,.loadmask").remove();
