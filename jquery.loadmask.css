@@ -16,14 +16,18 @@
     background: #c3daf9;
     padding:2px;
 }
-.loadmask-msg div {
-    padding:5px 10px 5px 25px;
-    background: #fbfbfb url('./images/loading.gif') no-repeat 5px 5px;
+.loadmask-msg div.message {
+    padding:5px 10px;
+    background-color: #fbfbfb;
     line-height: 16px;
 	border:1px solid #a3bad9;
     color:#222;
-    font:normal 11px tahoma, arial, helvetica, sans-serif;
+    font:normal 12px tahoma, arial, helvetica, sans-serif;
     cursor:wait;
+}
+.loadmask-msg div.icon {
+    padding-left: 25px;
+    background: #fbfbfb url('./images/loading.gif') no-repeat 5px 5px;
 }
 .masked {
     overflow: hidden !important;
