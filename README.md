@@ -31,7 +31,8 @@ The complete object for config option is as below:
    delay: 0,                 // how many milliseconds the loading will be displayed
    opacity: 0.5,             // the opacity of the masked div
    backgroundColor: '#CCC',  // background color of the applied mask <div> element
-   loadingIcon: true         // show loading icon or not
+   loadingIcon: true,        // show loading icon or not
+   cancellable: true         // clicking mask will cancel and clear it
 }
 ```
 #### Unmasking
